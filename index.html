@@ -1,0 +1,1435 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Drinks Consulting | Diagnóstico Hospitality</title>
+  <style>
+    :root {
+      --ink: #201915;
+      --muted: #776c63;
+      --paper: #fbf7f0;
+      --panel: #fffaf3;
+      --line: #eadfce;
+      --teal: #143d3c;
+      --teal-2: #0d2f2e;
+      --wine: #74312f;
+      --copper: #b9794c;
+      --olive: #6e7046;
+      --sand: #e8d7bd;
+      --good: #356f53;
+      --warn: #b9794c;
+      --bad: #9a4038;
+      --shadow: 0 18px 46px rgba(32, 25, 21, .14);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(185, 121, 76, .18), transparent 32rem),
+        linear-gradient(180deg, #fffaf3 0%, var(--paper) 42%, #f4eadb 100%);
+      letter-spacing: 0;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app {
+      width: min(100%, 1180px);
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(251, 247, 240, .88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(234, 223, 206, .72);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), var(--wine));
+      border-radius: 7px;
+      font-size: 13px;
+      box-shadow: 0 10px 24px rgba(20, 61, 60, .2);
+    }
+
+    .lang {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .screen { display: none; padding: 18px; animation: rise .28s ease; }
+    .screen.active { display: block; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      min-height: calc(100vh - 64px);
+      display: grid;
+      align-content: end;
+      margin: -18px -18px 0;
+      padding: 18px;
+      color: #fff;
+      background:
+        linear-gradient(180deg, rgba(16, 26, 25, .1) 0%, rgba(16, 26, 25, .72) 48%, rgba(16, 26, 25, .94) 100%),
+        url("prototype-assets/hospitality-hero.png") center / cover no-repeat;
+    }
+
+    .hero-inner { padding: 34vh 0 28px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, .32);
+      border-radius: 999px;
+      color: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.08);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin: 14px 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 12vw, 76px);
+      line-height: .92;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(30px, 8vw, 48px);
+      line-height: 1;
+      margin-bottom: 10px;
+      letter-spacing: 0;
+    }
+
+    h3 { font-size: 17px; margin-bottom: 6px; }
+    p { color: var(--muted); line-height: 1.45; }
+    .hero p { color: rgba(255,255,255,.82); max-width: 680px; font-size: 17px; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .btn {
+      border: 0;
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { color: #fff; background: var(--teal); box-shadow: 0 12px 28px rgba(20, 61, 60, .22); }
+    .btn.primary:hover { background: var(--teal-2); }
+    .btn.secondary { color: var(--ink); background: rgba(255, 255, 255, .84); border: 1px solid rgba(32,25,21,.08); }
+    .btn.ghost { color: var(--teal); background: transparent; border: 1px solid var(--line); }
+    .btn.full { width: 100%; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    .section { padding: 34px 0 4px; }
+    .grid { display: grid; gap: 12px; }
+    .grid.two { grid-template-columns: 1fr; }
+    .grid.four { grid-template-columns: 1fr 1fr; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 243, .88);
+      box-shadow: 0 8px 24px rgba(32, 25, 21, .06);
+      padding: 15px;
+    }
+    .card.dark {
+      background: var(--teal);
+      color: #fff;
+      border-color: transparent;
+    }
+    .card.dark p, .card.dark .mini { color: rgba(255,255,255,.72); }
+    .metric {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: rgba(185, 121, 76, .14);
+      color: var(--wine);
+      font-weight: 900;
+    }
+    .mini { color: var(--muted); font-size: 12px; font-weight: 750; text-transform: uppercase; }
+    .small { font-size: 13px; }
+
+    .step-head {
+      margin: 10px 0 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .progress-shell {
+      height: 9px;
+      border-radius: 999px;
+      background: #e8dfd2;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--wine), var(--copper));
+      transition: width .3s ease;
+    }
+
+    .category-tracker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .category-chip {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, .72);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.15;
+    }
+    .category-chip .state-icon {
+      flex: 0 0 22px;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid #d8cbb8;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .category-chip.completed {
+      border-color: rgba(53, 111, 83, .26);
+      background: rgba(53, 111, 83, .1);
+      color: var(--good);
+    }
+    .category-chip.completed .state-icon {
+      border-color: var(--good);
+      background: var(--good);
+      color: #fff;
+    }
+    .category-chip.current {
+      border-color: var(--copper);
+      background: #fbf0df;
+      color: var(--ink);
+      box-shadow: 0 0 0 2px rgba(185, 121, 76, .1);
+    }
+    .category-chip.current .state-icon {
+      border-color: var(--copper);
+      background: var(--copper);
+      color: #fff;
+    }
+
+    label { display: block; margin-bottom: 8px; font-weight: 800; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffdf9;
+      color: var(--ink);
+      padding: 12px;
+      outline-color: var(--copper);
+    }
+    textarea { min-height: 98px; resize: vertical; }
+    .field { margin-bottom: 14px; }
+
+    .choice-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .choice {
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffdf9;
+      color: var(--ink);
+      padding: 14px;
+      min-height: 82px;
+      font-weight: 800;
+    }
+    .choice span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; font-weight: 650; }
+    .choice.selected {
+      border-color: var(--teal);
+      background: #edf5f1;
+      box-shadow: 0 0 0 2px rgba(20, 61, 60, .12);
+    }
+
+    .question-wrap { display: grid; gap: 12px; }
+    .question-card {
+      padding: 18px;
+      background: #fffdf9;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .question-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #efe5d7;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .answers { display: grid; gap: 9px; margin-top: 16px; }
+    .answer {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf3;
+      padding: 10px;
+      text-align: left;
+      font-weight: 800;
+    }
+    .answer small { display: block; color: var(--muted); font-weight: 650; margin-top: 2px; }
+    .answer b {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--teal);
+    }
+    .answer.selected {
+      border-color: var(--copper);
+      background: #fbf0df;
+    }
+
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      margin: 18px -18px -18px;
+      padding: 12px 18px;
+      background: rgba(251, 247, 240, .9);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid rgba(234, 223, 206, .9);
+    }
+    .bottom-nav .btn { flex: 1; }
+
+    .score-hero {
+      display: grid;
+      gap: 14px;
+      margin: 8px 0 18px;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--teal), #1d4d46);
+      color: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .score-number {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 70px;
+      line-height: .9;
+      font-weight: 700;
+    }
+    .score-hero p { color: rgba(255,255,255,.78); margin-bottom: 0; }
+    .score-row {
+      display: grid;
+      gap: 8px;
+      padding: 13px;
+      background: #fffdf9;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+    .score-row-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 850;
+    }
+    .bar {
+      height: 8px;
+      background: #eadfce;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar > span {
+      display: block;
+      height: 100%;
+      width: 50%;
+      background: var(--copper);
+      border-radius: 99px;
+    }
+    .insight {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+    .badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--wine);
+      font-weight: 900;
+    }
+    .toast {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #edf5f1;
+      color: var(--teal);
+      font-weight: 800;
+      border: 1px solid #cbded7;
+    }
+    .toast.show { display: block; }
+
+    .report-preview {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fffdf9;
+      box-shadow: var(--shadow);
+    }
+    .report-cover {
+      min-height: 160px;
+      padding: 18px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(20,61,60,.95), rgba(116,49,47,.72)),
+        url("prototype-assets/hospitality-hero.png") center / cover no-repeat;
+      display: grid;
+      align-content: end;
+    }
+
+    .desktop-note { display: none; }
+    @media (min-width: 760px) {
+      .screen { padding: 28px; }
+      .hero { margin: -28px -28px 0; padding: 28px; border-radius: 0 0 18px 18px; }
+      .hero-inner { max-width: 760px; padding-top: 30vh; }
+      .grid.two { grid-template-columns: 1fr 1fr; }
+      .grid.four { grid-template-columns: repeat(4, 1fr); }
+      .choice-grid { grid-template-columns: repeat(4, 1fr); }
+      .question-wrap { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
+      .bottom-nav { margin-left: -28px; margin-right: -28px; margin-bottom: -28px; padding-left: calc(50% - 560px); padding-right: calc(50% - 560px); }
+      .desktop-note { display: block; }
+    }
+
+    /* Premium hospitality consulting visual layer */
+    :root {
+      --ink: #191512;
+      --muted: #746b61;
+      --paper: #f5efe4;
+      --panel: rgba(255, 252, 246, .9);
+      --line: rgba(43, 35, 28, .1);
+      --teal: #102f2d;
+      --teal-2: #0b2422;
+      --wine: #5c2928;
+      --copper: #b88758;
+      --olive: #6e7056;
+      --sand: #e7d9c4;
+      --good: #3f7658;
+      --warn: #b88758;
+      --bad: #8e3c35;
+      --shadow: 0 28px 70px rgba(27, 21, 16, .13);
+      --soft-shadow: 0 14px 38px rgba(27, 21, 16, .08);
+      --radius: 6px;
+    }
+
+    body {
+      background:
+        linear-gradient(90deg, rgba(25, 21, 18, .035) 1px, transparent 1px),
+        linear-gradient(180deg, #f8f2e8 0%, #f4eadc 52%, #eee0cf 100%);
+      background-size: 56px 56px, auto;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app { width: min(100%, 1240px); }
+    .topbar {
+      padding: 18px 20px;
+      background: rgba(248, 242, 232, .78);
+      border-bottom: 1px solid rgba(25, 21, 18, .07);
+      box-shadow: 0 8px 24px rgba(25, 21, 18, .04);
+    }
+    .brand {
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 3px;
+      background: #171412;
+      color: #f3dfbd;
+      box-shadow: inset 0 0 0 1px rgba(243, 223, 189, .26), 0 14px 34px rgba(25, 21, 18, .16);
+    }
+    .lang {
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #5d5147;
+    }
+
+    .screen { padding: 22px; }
+    .hero {
+      min-height: calc(100vh - 74px);
+      margin: -22px -22px 0;
+      padding: 22px;
+      background:
+        linear-gradient(90deg, rgba(14, 20, 18, .9) 0%, rgba(14, 20, 18, .66) 38%, rgba(14, 20, 18, .18) 100%),
+        linear-gradient(180deg, rgba(14, 20, 18, .04) 0%, rgba(14, 20, 18, .82) 100%),
+        url("prototype-assets/hospitality-hero.png") center / cover no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 22px 22px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(243, 223, 189, .74), transparent);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding: 38vh 0 34px;
+      max-width: 720px;
+    }
+    .eyebrow {
+      padding: 8px 11px;
+      border: 1px solid rgba(243, 223, 189, .34);
+      border-radius: 2px;
+      background: rgba(243, 223, 189, .08);
+      color: #f6e9d3;
+      font-size: 11px;
+      letter-spacing: .18em;
+    }
+    h1 {
+      margin: 18px 0 14px;
+      font-size: clamp(48px, 13vw, 96px);
+      line-height: .88;
+      font-weight: 500;
+      color: inherit;
+    }
+    h2 {
+      font-size: clamp(34px, 8vw, 56px);
+      line-height: .96;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    h3 {
+      font-size: 18px;
+      line-height: 1.18;
+      font-weight: 760;
+    }
+    p { line-height: 1.52; }
+    .hero p {
+      max-width: 600px;
+      color: rgba(255, 248, 236, .8);
+      font-size: 18px;
+    }
+
+    .btn {
+      min-height: 50px;
+      border-radius: 3px;
+      padding: 14px 18px;
+      font-size: 13px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      box-shadow: none;
+    }
+    .btn.primary {
+      background: #171412;
+      color: #f7e6c8;
+      box-shadow: 0 18px 42px rgba(23, 20, 18, .2);
+    }
+    .btn.primary:hover { background: #090807; }
+    .btn.secondary {
+      background: rgba(255, 252, 246, .92);
+      color: #171412;
+      border: 0;
+      box-shadow: 0 15px 36px rgba(23, 20, 18, .12);
+    }
+    .btn.ghost {
+      color: var(--teal);
+      border: 1px solid rgba(16, 47, 45, .2);
+      background: rgba(255, 252, 246, .42);
+    }
+
+    .section { padding: 46px 0 8px; }
+    .grid { gap: 16px; }
+    .card {
+      border: 0;
+      border-radius: 4px;
+      background: rgba(255, 252, 246, .78);
+      box-shadow: var(--soft-shadow);
+      padding: 19px;
+      backdrop-filter: blur(14px);
+    }
+    .card.dark {
+      background:
+        linear-gradient(135deg, rgba(16, 47, 45, .98), rgba(23, 20, 18, .96));
+      color: #fff7eb;
+      box-shadow: 0 30px 72px rgba(16, 47, 45, .26);
+    }
+    .card.dark p, .card.dark .mini { color: rgba(255, 247, 235, .68); }
+    .icon {
+      border-radius: 50%;
+      background: rgba(184, 135, 88, .16);
+      color: #7c5634;
+    }
+    .mini {
+      color: #8a7e72;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .16em;
+    }
+    .step-head {
+      margin: 14px 0 22px;
+      gap: 14px;
+    }
+    .progress-shell {
+      height: 5px;
+      background: rgba(25, 21, 18, .08);
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #171412, var(--copper));
+    }
+
+    .category-tracker {
+      gap: 7px;
+      padding: 10px;
+      border-radius: 5px;
+      background: rgba(255, 252, 246, .52);
+      box-shadow: inset 0 0 0 1px rgba(25, 21, 18, .05);
+    }
+    .category-chip {
+      min-height: 39px;
+      border: 0;
+      background: transparent;
+      color: #9a8e81;
+      padding: 7px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .category-chip .state-icon {
+      flex-basis: 20px;
+      width: 20px;
+      height: 20px;
+      border-color: rgba(25, 21, 18, .12);
+      font-size: 11px;
+    }
+    .category-chip.completed {
+      background: rgba(63, 118, 88, .09);
+      color: var(--good);
+    }
+    .category-chip.current {
+      background: #fff8ed;
+      color: #171412;
+      box-shadow: 0 12px 24px rgba(184, 135, 88, .14);
+    }
+
+    label {
+      margin-bottom: 9px;
+      color: #2a211b;
+      font-size: 13px;
+      letter-spacing: .01em;
+    }
+    input, select, textarea {
+      min-height: 52px;
+      border: 0;
+      border-radius: 3px;
+      background: rgba(255, 252, 246, .86);
+      box-shadow: inset 0 0 0 1px rgba(25, 21, 18, .1);
+    }
+    .choice {
+      border: 0;
+      border-radius: 3px;
+      background: rgba(255, 252, 246, .8);
+      box-shadow: inset 0 0 0 1px rgba(25, 21, 18, .08), 0 12px 28px rgba(25, 21, 18, .05);
+      min-height: 92px;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .choice:hover { transform: translateY(-1px); }
+    .choice.selected {
+      background: #fff7ea;
+      box-shadow: inset 0 0 0 1px rgba(184, 135, 88, .72), 0 18px 38px rgba(184, 135, 88, .16);
+    }
+
+    .question-wrap { gap: 18px; }
+    .question-card {
+      padding: 24px;
+      border: 0;
+      border-radius: 4px;
+      background:
+        linear-gradient(180deg, rgba(255, 252, 246, .98), rgba(255, 248, 238, .92));
+      box-shadow: var(--shadow);
+    }
+    .pill {
+      border-radius: 2px;
+      background: rgba(184, 135, 88, .15);
+      color: #5f422b;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .answer {
+      grid-template-columns: 38px 1fr;
+      border: 0;
+      border-radius: 3px;
+      background: rgba(245, 239, 228, .74);
+      box-shadow: inset 0 0 0 1px rgba(25, 21, 18, .07);
+      padding: 12px;
+    }
+    .answer b {
+      border-radius: 50%;
+      background: #27211d;
+      color: #f5d9ad;
+    }
+    .answer.selected {
+      background: #fff4e4;
+      box-shadow: inset 0 0 0 1px rgba(184, 135, 88, .8), 0 16px 34px rgba(184, 135, 88, .12);
+    }
+    .bottom-nav {
+      background: rgba(245, 239, 228, .86);
+      border-top: 1px solid rgba(25, 21, 18, .08);
+      box-shadow: 0 -18px 40px rgba(25, 21, 18, .08);
+    }
+
+    .score-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      align-content: end;
+      gap: 18px;
+      margin: 8px 0 24px;
+      padding: 26px;
+      border-radius: 4px;
+      background:
+        linear-gradient(90deg, rgba(16, 28, 26, .96), rgba(16, 47, 45, .78) 50%, rgba(16, 47, 45, .28)),
+        url("prototype-assets/hospitality-hero.png") center / cover no-repeat;
+      box-shadow: 0 38px 86px rgba(16, 28, 26, .28);
+    }
+    .score-hero::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(247, 230, 200, .18);
+      pointer-events: none;
+    }
+    .score-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+    .score-number {
+      font-size: clamp(88px, 28vw, 150px);
+      font-weight: 500;
+      color: #f6e6ca;
+    }
+    .score-hero .pill {
+      background: rgba(246, 230, 202, .16);
+      color: #f6e6ca;
+    }
+    .score-hero p {
+      max-width: 680px;
+      color: rgba(255, 248, 236, .78);
+      font-size: 16px;
+    }
+    .score-row {
+      padding: 16px;
+      border: 0;
+      border-radius: 3px;
+      background: rgba(255, 252, 246, .78);
+      box-shadow: var(--soft-shadow);
+    }
+    .score-row-head {
+      font-size: 14px;
+      letter-spacing: .01em;
+    }
+    .bar {
+      height: 6px;
+      background: rgba(25, 21, 18, .08);
+    }
+    .insight {
+      grid-template-columns: 32px 1fr;
+      padding: 10px 0;
+      border-top: 1px solid rgba(25, 21, 18, .07);
+    }
+    .insight:first-child { border-top: 0; }
+    .badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #171412;
+      color: #f6e6ca;
+    }
+    .report-preview {
+      border: 0;
+      border-radius: 4px;
+      box-shadow: var(--shadow);
+    }
+    .report-cover {
+      min-height: 220px;
+      background:
+        linear-gradient(135deg, rgba(17, 35, 33, .94), rgba(92, 41, 40, .54)),
+        url("prototype-assets/hospitality-hero.png") center / cover no-repeat;
+    }
+
+    @media (min-width: 760px) {
+      .screen { padding: 34px; }
+      .hero {
+        margin: -34px -34px 0;
+        padding: 34px;
+        border-radius: 0 0 2px 2px;
+      }
+      .hero-inner {
+        padding-top: 28vh;
+        padding-bottom: 54px;
+      }
+      .section { padding-top: 68px; }
+      .card { padding: 24px; }
+      .question-card { padding: 34px; }
+      .score-hero { min-height: 390px; padding: 44px; }
+      .bottom-nav {
+        margin-left: -34px;
+        margin-right: -34px;
+        margin-bottom: -34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="topbar">
+      <div class="brand"><span class="brand-mark">DDC</span><span>Digital Drinks</span></div>
+      <div class="lang">ES · EN</div>
+    </div>
+
+    <section id="landing" class="screen active">
+      <div class="hero">
+        <div class="hero-inner">
+          <span class="eyebrow">Diagnóstico Hospitality</span>
+          <h1>Evalúa tu negocio en minutos.</h1>
+          <p>Un diagnóstico visual para bares, restaurantes, hoteles boutique y resorts. Puntaje, prioridades y reporte ejecutivo.</p>
+          <div class="actions">
+            <button class="btn primary" data-go="profile">Iniciar diagnóstico</button>
+            <button class="btn secondary" data-scroll="landing-details">Qué evalúa</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="landing-details" class="section">
+        <p class="mini">Diseñado para operadores con poco tiempo</p>
+        <h2>Una lectura clara del negocio.</h2>
+        <div class="grid four">
+          <button class="choice" data-business="bar" data-go="profile">Bar<span>Bebidas, inventario, margen y servicio.</span></button>
+          <button class="choice" data-business="restaurant" data-go="profile">Restaurante<span>Menú, operación, costos y experiencia.</span></button>
+          <button class="choice" data-business="boutique_hotel" data-go="profile">Hotel boutique<span>Huésped, F&B, estándares y revenue.</span></button>
+          <button class="choice" data-business="resort" data-go="profile">Resort<span>Multi-outlet, revenue, servicio y control.</span></button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="grid two">
+          <div class="card dark">
+            <p class="mini">Recibirás</p>
+            <h3>Puntaje 1-100</h3>
+            <p>Resultado general y madurez del negocio.</p>
+          </div>
+          <div class="card">
+            <div class="metric"><div><p class="mini">Áreas</p><h3>8 dimensiones</h3></div><span class="icon">8</span></div>
+            <p>Marca, equipo, servicio, operaciones, A&B, revenue, tecnología y riesgo.</p>
+          </div>
+          <div class="card">
+            <div class="metric"><div><p class="mini">Salida</p><h3>Reporte PDF</h3></div><span class="icon">PDF</span></div>
+            <p>Resumen ejecutivo con prioridades de 30 y 90 días.</p>
+          </div>
+          <div class="card">
+            <div class="metric"><div><p class="mini">Tiempo</p><h3>8-12 min</h3></div><span class="icon">⏱</span></div>
+            <p>Sin cuentas, pagos ni datos financieros exactos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="profile" class="screen">
+      <div class="step-head">
+        <span class="pill">Paso 1 de 4</span>
+        <div class="progress-shell"><div class="progress-fill" style="width: 18%"></div></div>
+        <div>
+          <h2>Perfil del negocio</h2>
+          <p>Solo lo necesario para adaptar el diagnóstico.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label>Tipo de negocio</label>
+          <div class="choice-grid" data-field="businessType">
+            <button class="choice" data-value="bar">Bar<span>Coctelería, bebidas, barra.</span></button>
+            <button class="choice" data-value="restaurant">Restaurante<span>Comida, servicio, costos.</span></button>
+            <button class="choice" data-value="boutique_hotel">Hotel boutique<span>Huésped, rooms, F&B.</span></button>
+            <button class="choice" data-value="resort">Resort<span>Experiencia integral.</span></button>
+          </div>
+        </div>
+        <div class="grid two">
+          <div class="field">
+            <label>País</label>
+            <select id="country">
+              <option value="">Selecciona</option>
+              <option>Panamá</option><option>México</option><option>Colombia</option><option>Costa Rica</option><option>República Dominicana</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Ciudad</label>
+            <input id="city" placeholder="Ej. Ciudad de Panamá" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Tu rol</label>
+          <select id="role">
+            <option value="">Selecciona</option>
+            <option>Propietario/a</option><option>Gerente general</option><option>Gerente de A&B</option><option>Gerente de operaciones</option><option>Marketing/comercial</option><option>Consultor/a</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Prioridad principal</label>
+          <select id="priority">
+            <option value="">Selecciona</option>
+            <option>Mejorar rentabilidad</option><option>Aumentar ventas</option><option>Ordenar operaciones</option><option>Mejorar servicio</option><option>Fortalecer equipo/liderazgo</option><option>Mejorar programa de bebidas</option><option>Preparar crecimiento</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tamaño aproximado del negocio</label>
+          <select id="size">
+            <option value="">Selecciona</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="btn ghost" data-go="landing">Volver</button>
+        <button id="profileNext" class="btn primary">Continuar</button>
+      </div>
+    </section>
+
+    <section id="diagnostic" class="screen">
+      <div class="step-head">
+        <div class="metric">
+          <span class="pill" id="sectionPill">Sección 1 de 8</span>
+          <span class="mini" id="questionCount">0/35</span>
+        </div>
+        <div class="progress-shell"><div id="diagProgress" class="progress-fill"></div></div>
+        <div class="category-tracker" id="categoryTracker"></div>
+      </div>
+
+      <div class="question-wrap">
+        <div class="question-card">
+          <div class="question-top">
+            <span class="mini" id="categoryLabel">Concepto</span>
+            <span class="pill" id="categoryScoreHint">MVP</span>
+          </div>
+          <h2 id="questionText">Pregunta</h2>
+          <div class="answers" id="answers"></div>
+        </div>
+        <aside class="card desktop-note">
+          <p class="mini">Escala</p>
+          <h3>Responde rápido.</h3>
+          <p>Cada opción mide existencia, consistencia y mejora. No necesitas datos perfectos.</p>
+          <div class="progress-shell"><div id="sectionMiniProgress" class="progress-fill"></div></div>
+        </aside>
+      </div>
+
+      <div class="bottom-nav">
+        <button id="prevQuestion" class="btn ghost">Anterior</button>
+        <button id="nextQuestion" class="btn primary" disabled>Siguiente</button>
+      </div>
+    </section>
+
+    <section id="results" class="screen">
+      <div class="step-head">
+        <span class="pill">Paso 3 de 4</span>
+        <div class="progress-shell"><div class="progress-fill" style="width: 76%"></div></div>
+      </div>
+
+      <div class="score-hero">
+        <div class="metric">
+          <div>
+            <p class="mini">Puntaje general</p>
+            <div class="score-number"><span id="overallScore">72</span></div>
+          </div>
+          <span class="pill" id="maturityLabel">Competente</span>
+        </div>
+        <p id="resultSummary">Base sólida con oportunidades claras en revenue, tecnología y liderazgo.</p>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3>Desglose</h3>
+          <div class="grid" id="scoreRows"></div>
+        </div>
+        <div>
+          <h3>Lectura ejecutiva</h3>
+          <div class="grid">
+            <div class="card"><p class="mini">Fortalezas</p><div id="strengths"></div></div>
+            <div class="card"><p class="mini">Prioridades</p><div id="opportunities"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="card dark">
+          <p class="mini">Siguiente paso</p>
+          <h3>Recibe el reporte ejecutivo</h3>
+          <p>PDF breve con puntajes, prioridades y acciones sugeridas.</p>
+          <button class="btn secondary full" data-go="report">Enviar reporte a mi email</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="report" class="screen">
+      <div class="step-head">
+        <span class="pill">Paso 4 de 4</span>
+        <div>
+          <h2>Tu reporte está listo</h2>
+          <p>Déjanos tu email para enviarlo en PDF.</p>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <form id="reportForm" class="card">
+          <div class="field"><label>Nombre</label><input id="contactName" required placeholder="Tu nombre" /></div>
+          <div class="field"><label>Email</label><input id="contactEmail" required type="email" placeholder="tu@email.com" /></div>
+          <div class="field"><label>Negocio, opcional</label><input id="businessName" placeholder="Nombre del negocio" /></div>
+          <label class="small"><input id="reportConsent" type="checkbox" required /> Acepto recibir mi reporte por email.</label><br><br>
+          <label class="small"><input id="newsletter" type="checkbox" /> Quiero recibir insights hospitality de Digital Drinks y Bar Mentor.</label>
+          <div class="actions"><button class="btn primary full" type="submit">Recibir reporte PDF</button></div>
+        </form>
+
+        <div class="report-preview">
+          <div class="report-cover">
+            <p class="mini">Reporte ejecutivo</p>
+            <h3>Diagnóstico Hospitality</h3>
+          </div>
+          <div class="card" style="border:0; box-shadow:none;">
+            <div class="metric"><span>Puntaje</span><strong id="reportScore">72/100</strong></div>
+            <hr style="border:0;border-top:1px solid var(--line);margin:14px 0;">
+            <p class="small">Resumen, desglose, fortalezas, riesgos y acciones de 30/90 días.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="btn ghost" data-go="results">Volver</button>
+        <button class="btn primary" data-go="review">Solicitar revisión</button>
+      </div>
+    </section>
+
+    <section id="review" class="screen">
+      <div class="step-head">
+        <span class="pill">Opcional</span>
+        <div>
+          <h2>Revisión profesional</h2>
+          <p>Solicita una lectura experta. Sujeta a disponibilidad.</p>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <form id="reviewForm" class="card">
+          <div class="field"><label>Nombre</label><input id="reviewName" placeholder="Tu nombre" /></div>
+          <div class="field"><label>Email</label><input id="reviewEmail" type="email" placeholder="tu@email.com" /></div>
+          <div class="field"><label>Negocio</label><input id="reviewBusiness" placeholder="Nombre del negocio" /></div>
+          <div class="field">
+            <label>Qué quieres resolver primero</label>
+            <select id="challenge">
+              <option>Mejorar rentabilidad</option>
+              <option>Ordenar operaciones</option>
+              <option>Mejorar servicio</option>
+              <option>Rediseñar menú o bebidas</option>
+              <option>Fortalecer liderazgo/equipo</option>
+              <option>Revenue hotelero</option>
+            </select>
+          </div>
+          <div class="field"><label>Mensaje, opcional</label><textarea placeholder="Contexto breve"></textarea></div>
+          <button class="btn primary full" type="submit">Enviar solicitud</button>
+          <div id="reviewToast" class="toast">Solicitud recibida. Gracias por compartir tu diagnóstico.</div>
+        </form>
+
+        <div class="card dark">
+          <p class="mini">Digital Drinks Consulting</p>
+          <h3>Demanda controlada.</h3>
+          <p>La revisión no agenda una llamada automática. Permite identificar oportunidades reales para apoyo futuro.</p>
+          <div class="actions"><button class="btn secondary full" data-go="pdf-confirmation">Volver al reporte</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pdf-confirmation" class="screen">
+      <div class="step-head">
+        <span class="pill">Reporte enviado</span>
+        <div>
+          <h2>Diagnóstico recibido.</h2>
+          <p>Tu PDF ejecutivo queda listo para enviar. Este prototipo simula la entrega.</p>
+        </div>
+      </div>
+      <div class="grid two">
+        <div class="card dark">
+          <p class="mini">PDF ejecutivo</p>
+          <h3>Resumen listo</h3>
+          <p>Puntaje, áreas críticas y acciones sugeridas para 30/90 días.</p>
+          <button class="btn secondary full" id="downloadDemo">Descargar PDF demo</button>
+          <div id="downloadToast" class="toast">Descarga simulada para el prototipo.</div>
+        </div>
+        <div class="card">
+          <div class="metric"><div><p class="mini">Opcional</p><h3>Revisión profesional</h3></div><span class="icon">DDC</span></div>
+          <p>Solicita una lectura experta si tu negocio muestra oportunidades relevantes.</p>
+          <button class="btn primary full" data-go="review">Solicitar revisión</button>
+        </div>
+        <div class="card">
+          <div class="metric"><div><p class="mini">Relación futura</p><h3>Insights hospitality</h3></div><span class="icon">BM</span></div>
+          <p>El newsletter se gestiona desde el consentimiento del reporte.</p>
+          <button class="btn ghost full" data-go="landing">Nuevo diagnóstico</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      profile: { businessType: "" },
+      current: 0,
+      answers: {},
+      scores: {},
+      overall: 72
+    };
+
+    const categories = [
+      { key: "brand", label: "Concepto y marca", short: "Marca", q: [
+        "¿El concepto del negocio está claramente definido?",
+        "¿La propuesta se diferencia de competidores directos?",
+        "¿Precio, ambiente y oferta se sienten coherentes?",
+        "¿La marca se comunica de forma consistente?"
+      ]},
+      { key: "leadership", label: "Liderazgo y cultura", short: "Liderazgo", q: [
+        "¿Cada puesto tiene responsabilidades claras?",
+        "¿La capacitación es continua y práctica?",
+        "¿Los líderes supervisan activamente la operación?",
+        "¿El equipo recibe seguimiento de desempeño?"
+      ]},
+      { key: "service", label: "Experiencia y servicio", short: "Servicio", q: [
+        "¿La experiencia del cliente está diseñada de inicio a fin?",
+        "¿Existen estándares claros de servicio?",
+        "¿Los tiempos de atención son consistentes?",
+        "¿El equipo maneja quejas con criterio y rapidez?",
+        "¿Se mide feedback o reseñas con frecuencia?"
+      ]},
+      { key: "ops", label: "Operaciones y sistemas", short: "Operaciones", q: [
+        "¿Existen SOPs para procesos críticos?",
+        "¿Se usan checklists de apertura, operación y cierre?",
+        "¿Compras, recepción e inventario tienen controles?",
+        "¿La operación mantiene calidad en horas pico?",
+        "¿Se registran incidencias y acciones correctivas?"
+      ]},
+      { key: "fb", label: "Alimentos y bebidas", short: "A&B", q: [
+        "¿La oferta de A&B está alineada al concepto?",
+        "¿Recetas y porciones están estandarizadas?",
+        "¿Los productos están costeados?",
+        "¿Se mide rentabilidad por categoría o producto?",
+        "¿El equipo puede vender la oferta con seguridad?"
+      ]},
+      { key: "revenue", label: "Revenue y rentabilidad", short: "Revenue", q: [
+        "¿Se analizan ventas por categoría, horario o canal?",
+        "¿Los precios consideran costo, valor y mercado?",
+        "¿Se revisan márgenes con frecuencia?",
+        "¿El costo laboral se ajusta a demanda real?",
+        "¿Las promociones protegen rentabilidad?"
+      ]},
+      { key: "tech", label: "Tecnología y datos", short: "Datos", q: [
+        "¿Los sistemas capturan información confiable?",
+        "¿Se revisan reportes para tomar decisiones?",
+        "¿Reservas, ventas o inventario están bien configurados?",
+        "¿El equipo gerencial entiende los indicadores clave?"
+      ]},
+      { key: "risk", label: "Sostenibilidad y riesgo", short: "Riesgo", q: [
+        "¿Se reducen desperdicios y mermas?",
+        "¿Se cumplen estándares de higiene, permisos y seguridad?",
+        "¿Existen prácticas responsables de compras o consumo?"
+      ]}
+    ];
+
+    const questions = categories.flatMap((cat, catIndex) => cat.q.map((text, i) => ({
+      id: `${cat.key}_${i + 1}`,
+      text,
+      cat: cat.key,
+      catLabel: cat.label,
+      section: catIndex + 1
+    })));
+
+    const answerLabels = [
+      ["0", "No existe", "Sin proceso claro."],
+      ["1", "Informal", "Depende de personas."],
+      ["2", "Parcial", "Existe, pero inconsistente."],
+      ["3", "Consistente", "Se aplica regularmente."],
+      ["4", "Optimizado", "Se mide y mejora."]
+    ];
+
+    const sizeOptions = {
+      seats: [
+        ["small_seats", "Pequeño: menos de 25 asientos"],
+        ["medium_seats", "Mediano: 25-75 asientos"],
+        ["large_seats", "Grande: 76-150 asientos"],
+        ["high_volume_seats", "Alto volumen: más de 150 asientos"]
+      ],
+      rooms: [
+        ["small_rooms", "Pequeño: menos de 20 habitaciones"],
+        ["medium_rooms", "Mediano: 20-50 habitaciones"],
+        ["large_rooms", "Grande: 51-150 habitaciones"],
+        ["high_volume_rooms", "Alto volumen: más de 150 habitaciones"]
+      ]
+    };
+
+    function go(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (id === "results") renderResults();
+    }
+
+    document.addEventListener("click", (e) => {
+      const goTarget = e.target.closest("[data-go]");
+      if (goTarget) {
+        const business = goTarget.dataset.business;
+        if (business) setBusinessType(business);
+        go(goTarget.dataset.go);
+      }
+      const scrollTarget = e.target.closest("[data-scroll]");
+      if (scrollTarget) document.getElementById(scrollTarget.dataset.scroll).scrollIntoView({ behavior: "smooth" });
+      const choice = e.target.closest(".choice-grid .choice");
+      if (choice) {
+        const grid = choice.closest(".choice-grid");
+        grid.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
+        choice.classList.add("selected");
+        if (grid.dataset.field === "businessType") setBusinessType(choice.dataset.value);
+      }
+    });
+
+    function setBusinessType(value) {
+      state.profile.businessType = value;
+      document.querySelectorAll('[data-field="businessType"] .choice').forEach(c => {
+        c.classList.toggle("selected", c.dataset.value === value);
+      });
+      updateSizeOptions();
+    }
+
+    function updateSizeOptions() {
+      const select = document.getElementById("size");
+      if (!select) return;
+      const previous = select.value;
+      const kind = ["boutique_hotel", "resort"].includes(state.profile.businessType) ? "rooms" : "seats";
+      select.innerHTML = '<option value="">Selecciona</option>' + sizeOptions[kind]
+        .map(([value, label]) => `<option value="${value}">${label}</option>`)
+        .join("");
+      if ([...select.options].some(option => option.value === previous)) select.value = previous;
+    }
+
+    document.getElementById("profileNext").addEventListener("click", () => {
+      state.profile.country = document.getElementById("country").value;
+      state.profile.city = document.getElementById("city").value;
+      state.profile.role = document.getElementById("role").value;
+      state.profile.priority = document.getElementById("priority").value;
+      state.profile.size = document.getElementById("size").value;
+      state.current = 0;
+      renderQuestion();
+      go("diagnostic");
+    });
+
+    function renderQuestion() {
+      const q = questions[state.current];
+      document.getElementById("sectionPill").textContent = `Sección ${q.section} de 8`;
+      document.getElementById("questionCount").textContent = `${state.current + 1}/${questions.length}`;
+      document.getElementById("categoryLabel").textContent = q.catLabel;
+      document.getElementById("questionText").textContent = q.text;
+      const totalProgress = ((state.current) / questions.length) * 100;
+      document.getElementById("diagProgress").style.width = `${Math.max(4, totalProgress)}%`;
+      const currentCat = categories[q.section - 1];
+      const catStart = questions.findIndex(item => item.cat === currentCat.key);
+      const catProgress = ((state.current - catStart) / currentCat.q.length) * 100;
+      document.getElementById("sectionMiniProgress").style.width = `${Math.max(8, catProgress)}%`;
+      renderCategoryTracker(q.section - 1);
+
+      const answers = document.getElementById("answers");
+      answers.innerHTML = "";
+      answerLabels.forEach(([value, label, sub]) => {
+        const btn = document.createElement("button");
+        btn.className = "answer";
+        btn.innerHTML = `<b>${value}</b><span>${label}<small>${sub}</small></span>`;
+        btn.classList.toggle("selected", state.answers[q.id] === Number(value));
+        btn.addEventListener("click", () => {
+          state.answers[q.id] = Number(value);
+          renderQuestion();
+          document.getElementById("nextQuestion").disabled = false;
+        });
+        answers.appendChild(btn);
+      });
+      document.getElementById("prevQuestion").disabled = state.current === 0;
+      document.getElementById("nextQuestion").disabled = state.answers[q.id] === undefined;
+      document.getElementById("nextQuestion").textContent = state.current === questions.length - 1 ? "Ver resultados" : "Siguiente";
+    }
+
+    function renderCategoryTracker(currentIndex) {
+      const tracker = document.getElementById("categoryTracker");
+      tracker.innerHTML = categories.map((cat, index) => {
+        const status = index < currentIndex ? "completed" : index === currentIndex ? "current" : "pending";
+        const icon = status === "completed" ? "✓" : status === "current" ? "•" : "";
+        return `<div class="category-chip ${status}"><span class="state-icon">${icon}</span><span>${cat.label}</span></div>`;
+      }).join("");
+    }
+
+    document.getElementById("prevQuestion").addEventListener("click", () => {
+      if (state.current > 0) {
+        state.current -= 1;
+        renderQuestion();
+      }
+    });
+    document.getElementById("nextQuestion").addEventListener("click", () => {
+      if (state.current < questions.length - 1) {
+        state.current += 1;
+        renderQuestion();
+      } else {
+        calculateScores();
+        go("results");
+      }
+    });
+
+    function calculateScores() {
+      const weights = { brand: 10, leadership: 13, service: 16, ops: 17, fb: 20, revenue: 14, tech: 6, risk: 4 };
+      state.scores = {};
+      categories.forEach(cat => {
+        const ids = questions.filter(q => q.cat === cat.key).map(q => q.id);
+        const raw = ids.reduce((sum, id) => sum + (state.answers[id] ?? 2), 0);
+        state.scores[cat.key] = Math.round((raw / (ids.length * 4)) * 100);
+      });
+      const weighted = Object.entries(state.scores).reduce((sum, [key, score]) => sum + score * weights[key], 0) / 100;
+      state.overall = Math.max(1, Math.round(weighted));
+    }
+
+    function maturity(score) {
+      if (score < 40) return "Crítico";
+      if (score < 60) return "Básico";
+      if (score < 75) return "Competente";
+      if (score < 90) return "Avanzado";
+      return "Referente";
+    }
+
+    function renderResults() {
+      if (!Object.keys(state.scores).length) calculateScores();
+      document.getElementById("overallScore").textContent = state.overall;
+      document.getElementById("reportScore").textContent = `${state.overall}/100`;
+      document.getElementById("maturityLabel").textContent = maturity(state.overall);
+      document.getElementById("resultSummary").textContent = state.overall >= 75
+        ? "Operación competitiva con oportunidades de optimización."
+        : "Base funcional con oportunidades claras de mejora prioritaria.";
+
+      const rows = document.getElementById("scoreRows");
+      rows.innerHTML = "";
+      categories.forEach(cat => {
+        const score = state.scores[cat.key];
+        const color = score < 55 ? "var(--bad)" : score < 75 ? "var(--warn)" : "var(--good)";
+        const row = document.createElement("div");
+        row.className = "score-row";
+        row.innerHTML = `<div class="score-row-head"><span>${cat.short}</span><strong>${score}</strong></div><div class="bar"><span style="width:${score}%;background:${color}"></span></div>`;
+        rows.appendChild(row);
+      });
+
+      const sorted = [...categories].sort((a, b) => state.scores[b.key] - state.scores[a.key]);
+      const strengths = sorted.slice(0, 3);
+      const gaps = sorted.slice(-3).reverse();
+      document.getElementById("strengths").innerHTML = strengths.map((cat, i) => `<div class="insight"><span class="badge">${i + 1}</span><div><strong>${cat.label}</strong><p class="small">Buen punto de apoyo para crecer.</p></div></div>`).join("");
+      document.getElementById("opportunities").innerHTML = gaps.map((cat, i) => `<div class="insight"><span class="badge">${i + 1}</span><div><strong>${cat.label}</strong><p class="small">Área recomendada para priorizar.</p></div></div>`).join("");
+    }
+
+    document.getElementById("reportForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      document.getElementById("reviewName").value = document.getElementById("contactName").value;
+      document.getElementById("reviewEmail").value = document.getElementById("contactEmail").value;
+      document.getElementById("reviewBusiness").value = document.getElementById("businessName").value;
+      go("pdf-confirmation");
+    });
+
+    document.getElementById("reviewForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      document.getElementById("reviewToast").classList.add("show");
+    });
+
+    document.getElementById("downloadDemo").addEventListener("click", () => {
+      document.getElementById("downloadToast").classList.add("show");
+    });
+
+    updateSizeOptions();
+  </script>
+</body>
+</html>
